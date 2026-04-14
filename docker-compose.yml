@@ -1,0 +1,26 @@
+services:
+  # Django
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "travel_planner"
+    command: ["/entrypoint.sh"]
+    env_file:
+      - .env.prod
+    volumes:
+      - static_volume:/app/staticfiles
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  static_volume:
+
+networks:
+  default:
+    name: planner_network
+

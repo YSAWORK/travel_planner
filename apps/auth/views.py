@@ -3,15 +3,21 @@
 
 
 ###### IMPORT TOOLS #######
-from drf_spectacular.utils import OpenApiResponse, extend_schema, OpenApiExample, extend_schema_view
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, permissions
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    extend_schema,
+    OpenApiExample,
+    extend_schema_view,
+)
 
 from apps.auth import serializers
 
@@ -37,7 +43,7 @@ from apps.auth import serializers
                 value={
                     "username": "john_doe",
                     "password": "StrongPassword123!",
-                    "password2": "StrongPassword123!"
+                    "password2": "StrongPassword123!",
                 },
                 request_only=True,
             ),
@@ -57,7 +63,8 @@ from apps.auth import serializers
 )
 @method_decorator(csrf_exempt, name="dispatch")
 class RegistrationView(APIView):
-    """ API view for user registration."""
+    """API view for user registration."""
+
     permission_classes = [AllowAny]
     authentication_classes = ()
 
@@ -119,9 +126,7 @@ class RegistrationView(APIView):
             ),
             OpenApiExample(
                 "Invalid Credentials Response",
-                value={
-                    "error": "Invalid credentials."
-                },
+                value={"error": "Invalid credentials."},
                 response_only=True,
                 status_codes=["401"],
             ),
@@ -130,12 +135,13 @@ class RegistrationView(APIView):
 )
 @method_decorator(csrf_exempt, name="dispatch")
 class LoginView(APIView):
-    """ API view for user login."""
+    """API view for user login."""
+
     permission_classes = [AllowAny]
     authentication_classes = ()
 
     def post(self, request):
-        """ Authenticate user and return JWT tokens."""
+        """Authenticate user and return JWT tokens."""
         serializer = serializers.LoginSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -177,8 +183,9 @@ class LoginView(APIView):
         ),
     ],
 )
+@api_view(["POST"])
 def logout_view(request):
+    """Log out the user"""
     permission_classes = [permissions.IsAuthenticated]
-    """ Log out the user """
     logout(request)
     return Response("User logged out", status=status.HTTP_204_NO_CONTENT)

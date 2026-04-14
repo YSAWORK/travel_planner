@@ -6,12 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_planner', '0002_project_updated_at_alter_project_created_at_and_more'),
+        ("app_planner", "0002_project_updated_at_alter_project_created_at_and_more"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='projectplace',
-            constraint=models.UniqueConstraint(fields=('project', 'external_id'), name='unique_external_id_per_project'),
+            model_name="projectplace",
+            constraint=models.UniqueConstraint(
+                fields=("project", "external_id"), name="unique_external_id_per_project"
+            ),
         ),
     ]

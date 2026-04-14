@@ -7,23 +7,37 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_planner', '0001_initial'),
+        ("app_planner", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='project',
-            name='updated_at',
-            field=models.DateTimeField(auto_now=True, help_text='Project updated time', verbose_name='updated at'),
+            model_name="project",
+            name="updated_at",
+            field=models.DateTimeField(
+                auto_now=True,
+                help_text="Project updated time",
+                verbose_name="updated at",
+            ),
         ),
         migrations.AlterField(
-            model_name='project',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, help_text='Project created time', verbose_name='created at'),
+            model_name="project",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True,
+                help_text="Project created time",
+                verbose_name="created at",
+            ),
         ),
         migrations.AlterField(
-            model_name='projectplace',
-            name='project',
-            field=models.ForeignKey(help_text='Project place', on_delete=django.db.models.deletion.CASCADE, related_name='places', to='app_planner.project', verbose_name='project place'),
+            model_name="projectplace",
+            name="project",
+            field=models.ForeignKey(
+                help_text="Project place",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="places",
+                to="app_planner.project",
+                verbose_name="project place",
+            ),
         ),
     ]

@@ -3,6 +3,7 @@
 from django.contrib import admin
 from .models import Project, ProjectPlace
 
+
 ###### PLACE ADMIN (INLINE) ######
 class ProjectPlaceInline(admin.TabularInline):
     model = ProjectPlace
@@ -10,6 +11,7 @@ class ProjectPlaceInline(admin.TabularInline):
     fields = ("external_id", "is_visited", "notes")
     readonly_fields = ()
     ordering = ("external_id",)
+
 
 ###### PROJECT ADMIN ######
 @admin.register(Project)
@@ -56,6 +58,7 @@ class ProjectAdmin(admin.ModelAdmin):
             },
         ),
     )
+
 
 ###### PLACE ADMIN ######
 @admin.register(ProjectPlace)

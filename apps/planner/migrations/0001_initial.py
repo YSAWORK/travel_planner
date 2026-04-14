@@ -15,37 +15,118 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Project name', max_length=255, verbose_name='project name')),
-                ('description', models.TextField(blank=True, help_text='Project description (optional)', verbose_name='project description')),
-                ('start_date', models.DateField(blank=True, help_text='Start date of project (optional)', null=True, verbose_name='start date')),
-                ('is_completed', models.BooleanField(default=False, help_text='Project completed status', verbose_name='completed status')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='projects', to=settings.AUTH_USER_MODEL, verbose_name='user')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Project name",
+                        max_length=255,
+                        verbose_name="project name",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True,
+                        help_text="Project description (optional)",
+                        verbose_name="project description",
+                    ),
+                ),
+                (
+                    "start_date",
+                    models.DateField(
+                        blank=True,
+                        help_text="Start date of project (optional)",
+                        null=True,
+                        verbose_name="start date",
+                    ),
+                ),
+                (
+                    "is_completed",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Project completed status",
+                        verbose_name="completed status",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="projects",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'project',
-                'verbose_name_plural': 'projects',
-                'ordering': ['-created_at'],
-                'unique_together': {('user', 'name')},
+                "verbose_name": "project",
+                "verbose_name_plural": "projects",
+                "ordering": ["-created_at"],
+                "unique_together": {("user", "name")},
             },
         ),
         migrations.CreateModel(
-            name='ProjectPlace',
+            name="ProjectPlace",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('external_id', models.IntegerField(help_text='Project external id', verbose_name='external id')),
-                ('notes', models.TextField(blank=True, help_text='Project notes', verbose_name='project notes')),
-                ('is_visited', models.BooleanField(default=False, help_text='Project visited status', verbose_name='visited status')),
-                ('project', models.ForeignKey(help_text='Project place', on_delete=django.db.models.deletion.CASCADE, related_name='places', to='app_planner.project', verbose_name='project place')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "external_id",
+                    models.IntegerField(
+                        help_text="Project external id", verbose_name="external id"
+                    ),
+                ),
+                (
+                    "notes",
+                    models.TextField(
+                        blank=True,
+                        help_text="Project notes",
+                        verbose_name="project notes",
+                    ),
+                ),
+                (
+                    "is_visited",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Project visited status",
+                        verbose_name="visited status",
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        help_text="Project place",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="places",
+                        to="app_planner.project",
+                        verbose_name="project place",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'project place',
-                'verbose_name_plural': 'project places',
-                'ordering': ['project', 'external_id'],
-                'unique_together': {('project', 'external_id')},
+                "verbose_name": "project place",
+                "verbose_name_plural": "project places",
+                "ordering": ["project", "external_id"],
+                "unique_together": {("project", "external_id")},
             },
         ),
     ]

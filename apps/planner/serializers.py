@@ -178,7 +178,11 @@ class ProjectCreateSerializer(serializers.ModelSerializer):
                 return project
         except IntegrityError:
             raise serializers.ValidationError(
-                {"places": ["Duplicate external_id for the same project is not allowed."]}
+                {
+                    "places": [
+                        "Duplicate external_id for the same project is not allowed."
+                    ]
+                }
             )
 
 

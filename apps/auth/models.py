@@ -6,11 +6,13 @@ from django.contrib.auth.models import AbstractUser
 from apps.auth import validators
 
 
-###### USER ######
 class User(AbstractUser):
     """Custom User model extending AbstractUser with additional validations."""
-    email = models.EmailField(validators=[validators.validate_email])
-    password = models.CharField(validators=[validators.validate_password])
+
+    email = models.EmailField(
+        unique=True,
+        validators=[validators.validate_email],
+    )
 
     class Meta:
         default_related_name = "users"

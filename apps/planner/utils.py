@@ -7,8 +7,9 @@ from rest_framework.exceptions import APIException
 
 
 def check_places_count(instance):
-    """Checks places count """
+    """Checks places count"""
     from apps.planner.models import ProjectPlace
+
     if not instance.pk:
         places_count = ProjectPlace.objects.filter(project=instance.project).count()
         if places_count >= 10:
@@ -28,11 +29,11 @@ def update_project_status(project):
 
 
 def check_delete_conditions(project):
-    """ Checks delete conditions """
+    """Checks delete conditions"""
     if project.places.filter(is_visited=True).exists():
-        raise ValidationError({
-            "non_field_errors": ["Cannot delete project with visited places."]
-        })
+        raise ValidationError(
+            {"non_field_errors": ["Cannot delete project with visited places."]}
+        )
 
 
 def check_external_id_via_api(item_id: int) -> int:

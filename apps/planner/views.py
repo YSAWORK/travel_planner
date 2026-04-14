@@ -1,7 +1,12 @@
 # ./apps/planner/views.py
 
 
-from drf_spectacular.utils import OpenApiResponse, extend_schema, OpenApiExample, extend_schema_view
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    extend_schema,
+    OpenApiExample,
+    extend_schema_view,
+)
 from rest_framework import generics, permissions
 from rest_framework.exceptions import ValidationError
 
@@ -200,6 +205,7 @@ class ProjectPlaceListCreateView(generics.ListCreateAPIView):
         context = super().get_serializer_context()
         context["project"] = self.get_project()
         return context
+
 
 @extend_schema_view(
     get=extend_schema(
