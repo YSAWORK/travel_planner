@@ -13,6 +13,7 @@ env_file = os.path.join(BASE_DIR, ".env.dev")
 env.read_env(env_file)
 
 SECRET_KEY = env('SECRET_KEY')
+API_BASE_URL = env('API_BASE_URL')
 DEBUG = env('DEBUG')
 
 AUTH_USER_MODEL = 'app_auth.User'
@@ -66,6 +67,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+CACHE_TTL = env.int('CACHE_TTL', default=60)
 
 DATABASES = {
     'default': {

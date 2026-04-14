@@ -3,6 +3,10 @@
 from django.db import models
 
 from apps.auth.models import User
+from apps.planner.utils import (
+    check_places_count,
+    update_project_status,
+    check_delete_conditions)
 
 
 ###### PROJECTS ######
@@ -35,8 +39,19 @@ class Project(models.Model):
         verbose_name='completed status',
     )
     created_at = models.DateTimeField(
-        auto_now_add=True
+        auto_now_add=True,
+        verbose_name='created at',
+        help_text='Project created time',
     )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='updated at',
+        help_text='Project updated time',
+    )
+
+    def delete(self, *args, **kwargs):
+        check_delete_conditions(self)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -72,6 +87,19 @@ class ProjectPlace(models.Model):
         verbose_name='visited status',
     )
 
+    def clean(self):
+        check_places_count(self)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+        update_project_status(self.project)
+
+    def delete(self, *args, **kwargs):
+        project = self.project
+        super().delete(*args, **kwargs)
+        update_project_status(project)
+
     def __str__(self):
         return self.project.name
 
@@ -80,3 +108,9 @@ class ProjectPlace(models.Model):
         verbose_name = 'project place'
         verbose_name_plural = 'project places'
         ordering = ['project', 'external_id']
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project", "external_id"],
+                name="unique_external_id_per_project",
+            )
+        ]

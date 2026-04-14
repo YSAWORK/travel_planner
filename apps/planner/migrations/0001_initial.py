@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                 ('external_id', models.IntegerField(help_text='Project external id', verbose_name='external id')),
                 ('notes', models.TextField(blank=True, help_text='Project notes', verbose_name='project notes')),
                 ('is_visited', models.BooleanField(default=False, help_text='Project visited status', verbose_name='visited status')),
-                ('project', models.ForeignKey(help_text='Project place', on_delete=django.db.models.deletion.CASCADE, related_name='places', to='planner.project', verbose_name='project place')),
+                ('project', models.ForeignKey(help_text='Project place', on_delete=django.db.models.deletion.CASCADE, related_name='places', to='app_planner.project', verbose_name='project place')),
             ],
             options={
                 'verbose_name': 'project place',
