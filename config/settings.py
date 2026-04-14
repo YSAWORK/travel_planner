@@ -27,7 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'drf_spectacular',
     'apps.auth.apps.AuthConfig',
+    'apps.planner.apps.PlannerConfig',
 ]
 
 MIDDLEWARE = [

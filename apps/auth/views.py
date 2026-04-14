@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from apps.auth import serializers, models
+from apps.auth import serializers
 
 
 ###### REGISTRATION ######
@@ -20,6 +20,7 @@ from apps.auth import serializers, models
 class RegistrationView(APIView):
     """ API view for user registration."""
     permission_classes = [AllowAny]
+    authentication_classes = ()
 
     def post(self, request):
         # Create a new user
