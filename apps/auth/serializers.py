@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 class RegisterSerializer(serializers.ModelSerializer):
     """ Serializer for user registration."""
     password = serializers.CharField(write_only=True, min_length=6)
+    password2 = serializers.CharField(write_only=True, min_length=6)
 
     class Meta:
         model = User

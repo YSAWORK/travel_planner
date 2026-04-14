@@ -3,10 +3,11 @@
 
 
 ###### IMPORT TOOLS #######
+from drf_spectacular.utils import OpenApiResponse, extend_schema, OpenApiExample, extend_schema_view
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -16,6 +17,44 @@ from apps.auth import serializers
 
 
 ###### REGISTRATION ######
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Auth"],
+        summary="Реєстрація користувача",
+        description="Створити нового користувача та повернути JWT access/refresh токени.",
+        request=serializers.RegisterSerializer,
+        responses={
+            201: OpenApiResponse(
+                description="Користувача успішно зареєстровано.",
+            ),
+            400: OpenApiResponse(
+                description="Помилка валідації даних.",
+            ),
+        },
+        examples=[
+            OpenApiExample(
+                "Registration Example",
+                value={
+                    "username": "john_doe",
+                    "password": "StrongPassword123!",
+                    "password2": "StrongPassword123!"
+                },
+                request_only=True,
+            ),
+            OpenApiExample(
+                "Registration Success Response",
+                value={
+                    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access_token",
+                    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh_token",
+                    "user_id": 1,
+                    "username": "john_doe",
+                },
+                response_only=True,
+                status_codes=["201"],
+            ),
+        ],
+    )
+)
 @method_decorator(csrf_exempt, name="dispatch")
 class RegistrationView(APIView):
     """ API view for user registration."""
@@ -41,6 +80,54 @@ class RegistrationView(APIView):
 
 
 ###### LOG IN ######
+@extend_schema_view(
+    post=extend_schema(
+        tags=["Auth"],
+        summary="Вхід користувача",
+        description="Автентифікувати користувача за username/password та повернути JWT access/refresh токени.",
+        request=serializers.LoginSerializer,
+        responses={
+            200: OpenApiResponse(
+                description="Вхід успішний.",
+            ),
+            400: OpenApiResponse(
+                description="Помилка валідації даних.",
+            ),
+            401: OpenApiResponse(
+                description="Невірні облікові дані.",
+            ),
+        },
+        examples=[
+            OpenApiExample(
+                "Login Example",
+                value={
+                    "username": "john_doe",
+                    "password": "StrongPassword123!",
+                },
+                request_only=True,
+            ),
+            OpenApiExample(
+                "Login Success Response",
+                value={
+                    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access_token",
+                    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh_token",
+                    "user_id": 1,
+                    "username": "john_doe",
+                },
+                response_only=True,
+                status_codes=["200"],
+            ),
+            OpenApiExample(
+                "Invalid Credentials Response",
+                value={
+                    "error": "Invalid credentials."
+                },
+                response_only=True,
+                status_codes=["401"],
+            ),
+        ],
+    )
+)
 @method_decorator(csrf_exempt, name="dispatch")
 class LoginView(APIView):
     """ API view for user login."""
@@ -74,7 +161,24 @@ class LoginView(APIView):
 
 
 ###### LOG OUT ######
+@extend_schema(
+    tags=["Auth"],
+    summary="Вихід користувача",
+    description="Завершити сесію поточного користувача.",
+    responses={
+        204: OpenApiResponse(description="Користувача успішно розлогінено."),
+    },
+    examples=[
+        OpenApiExample(
+            "Logout Success Response",
+            value="User logged out",
+            response_only=True,
+            status_codes=["204"],
+        ),
+    ],
+)
 def logout_view(request):
+    permission_classes = [permissions.IsAuthenticated]
     """ Log out the user """
     logout(request)
     return Response("User logged out", status=status.HTTP_204_NO_CONTENT)
